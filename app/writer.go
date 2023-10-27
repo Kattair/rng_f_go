@@ -33,8 +33,8 @@ func WriteMatrix(gen Generator, rowCount, colCount uint, output io.Writer) {
 	}
 }
 
-func appendToWriter(appender func([]byte), writer *bufio.Writer) {
+func appendToWriter(appender func([]byte) []byte, writer *bufio.Writer) {
 	buffer := writer.AvailableBuffer()
-	appender(buffer)
-	writer.Write(buffer)
+	appendedBuffer := appender(buffer)
+	writer.Write(appendedBuffer)
 }

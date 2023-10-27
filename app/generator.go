@@ -1,8 +1,8 @@
 package app
 
 type Generator interface {
-	AppendLineStart([]byte)
-	AppendLineEnd([]byte)
-	AppendElement([]byte)
-	AppendDelimiter([]byte)
+	AppendLineStart(buffer []byte) []byte
+	AppendLineEnd(buffer []byte) []byte
+	AppendElement(buffer []byte) []byte
+	AppendDelimiter(buffer []byte) []byte
 }
