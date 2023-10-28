@@ -21,10 +21,10 @@ func (g *NumberGenerator) AppendLineEnd(buffer []byte) []byte {
 }
 
 func (g *NumberGenerator) AppendElement(buffer []byte) []byte {
-	randomNumber := rand.Intn(g.rangeTo-g.rangeFrom) + g.rangeFrom
+	randomNumber := rand.Intn(g.RangeTo-g.RangeFrom) + g.RangeFrom
 	return strconv.AppendInt(buffer, int64(randomNumber), 10)
 }
 
 func (g *NumberGenerator) AppendDelimiter(buffer []byte) []byte {
-	return fmt.Append(buffer, g.delimiter)
+	return fmt.Append(buffer, g.Delimiter)
 }
