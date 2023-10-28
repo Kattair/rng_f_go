@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,16 +16,18 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
+	"math"
 	"os"
+	"strconv"
 
+	"github.com/Kattair/rng_f_go/app"
 	"github.com/spf13/cobra"
 )
 
-
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "rng_f_go",
+	Use:   "rng_f_go ROW_COUNT COL_COUNT",
 	Short: "A brief description of your application",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
@@ -33,9 +35,12 @@ examples and usage of using your application. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
+	Args: cobra.ExactArgs(2),
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return run(args)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -47,6 +52,11 @@ func Execute() {
 	}
 }
 
+var delimiter string
+var output string
+var rangeFrom int
+var rangeTo int
+
 func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -56,7 +66,21 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.Flags().StringVarP(&delimiter, "delimiter", "d", " ", "Define a string to be used as the delimiter between columns")
+	rootCmd.Flags().StringVarP(&output, "output-filename", "o", "output.txt", "Specify output filename")
+	rootCmd.Flags().IntVarP(&rangeFrom, "range-from", "f", math.MinInt, "Specify lower limit for number range")
+	rootCmd.Flags().IntVarP(&rangeTo, "range-to", "t", math.MaxInt, "Specify upper limit for number range")
 }
 
+func run(args []string) error {
+	rowCount, rowErr := strconv.ParseUint(args[0], 0, 64)
+	colCount, colErr := strconv.ParseUint(args[1], 0, 64)
+	if rowErr != nil || colErr != nil {
+		return fmt.Errorf("failed to parse row count (was '%s') or col count (was '%s')", args[0], args[1])
+	}
 
+	generator := app.NumberGenerator{RangeFrom: rangeFrom, RangeTo: rangeTo, Delimiter: delimiter}
+	app.WriteMatrixToFile(&generator, uint(rowCount), uint(colCount), output)
+
+	return nil
+}

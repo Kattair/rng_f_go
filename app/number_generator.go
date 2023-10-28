@@ -7,9 +7,9 @@ import (
 )
 
 type NumberGenerator struct {
-	rangeFrom int
-	rangeTo   int
-	delimiter string
+	RangeFrom int
+	RangeTo   int
+	Delimiter string
 }
 
 func (g *NumberGenerator) AppendLineStart(buffer []byte) []byte {
