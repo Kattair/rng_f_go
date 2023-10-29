@@ -1,30 +1,40 @@
 package app
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
 )
 
 type NumberGenerator struct {
-	RangeFrom int32
-	RangeTo   int32
-	Delimiter string
+	rangeFrom  int32
+	rangeTo    int32
+	totalRange int64
+	lineStart  []byte
+	lineEnd    []byte
+	delimiter  []byte
+}
+
+func NewNumberGenerator(rangeFrom, rangeTo int32, delimiter string) *NumberGenerator {
+	totalRange := int64(rangeTo) - int64(rangeFrom)
+	lineStart := []byte("")
+	lineEnd := []byte("\n")
+	delimiterBytes := []byte(delimiter)
+	return &NumberGenerator{rangeFrom, rangeTo, totalRange, lineStart, lineEnd, delimiterBytes}
 }
 
 func (g *NumberGenerator) AppendLineStart(buffer []byte) []byte {
-	return fmt.Append(buffer, "")
+	return append(buffer, g.lineStart...)
 }
 
 func (g *NumberGenerator) AppendLineEnd(buffer []byte) []byte {
-	return fmt.Appendln(buffer, "")
+	return append(buffer, g.lineEnd...)
 }
 
 func (g *NumberGenerator) AppendElement(buffer []byte) []byte {
-	randomNumber := rand.Intn(int(g.RangeTo)-int(g.RangeFrom)) + int(g.RangeFrom)
-	return strconv.AppendInt(buffer, int64(randomNumber), 10)
+	randomNumber := rand.Int63n(g.totalRange) + int64(g.rangeFrom)
+	return strconv.AppendInt(buffer, randomNumber, 10)
 }
 
 func (g *NumberGenerator) AppendDelimiter(buffer []byte) []byte {
-	return fmt.Append(buffer, g.Delimiter)
+	return append(buffer, []byte(g.delimiter)...)
 }
