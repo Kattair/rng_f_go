@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"math/rand"
 	"strconv"
 )
@@ -14,12 +15,15 @@ type NumberGenerator struct {
 	delimiter  []byte
 }
 
-func NewNumberGenerator(rangeFrom, rangeTo int32, delimiter string) *NumberGenerator {
+func NewNumberGenerator(rangeFrom, rangeTo int32, delimiter string) (*NumberGenerator, error) {
 	totalRange := int64(rangeTo) - int64(rangeFrom)
+	if totalRange <= 0 {
+		return nil, fmt.Errorf("failed to create number generator with range <%d, %d)", rangeFrom, rangeTo)
+	}
 	lineStart := []byte("")
 	lineEnd := []byte("\n")
 	delimiterBytes := []byte(delimiter)
-	return &NumberGenerator{rangeFrom, rangeTo, totalRange, lineStart, lineEnd, delimiterBytes}
+	return &NumberGenerator{rangeFrom, rangeTo, totalRange, lineStart, lineEnd, delimiterBytes}, nil
 }
 
 func (g *NumberGenerator) AppendLineStart(buffer []byte) []byte {

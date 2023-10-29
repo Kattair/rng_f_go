@@ -79,7 +79,10 @@ func run(args []string) error {
 		return fmt.Errorf("failed to parse row count (was '%s') or col count (was '%s')", args[0], args[1])
 	}
 
-	generator := app.NewNumberGenerator(rangeFrom, rangeTo, delimiter)
+	generator, err := app.NewNumberGenerator(rangeFrom, rangeTo, delimiter)
+	if err != nil {
+		return err
+	}
 	app.WriteMatrixToFile(generator, uint(rowCount), uint(colCount), output)
 
 	return nil
