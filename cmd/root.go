@@ -54,8 +54,8 @@ func Execute() {
 
 var delimiter string
 var output string
-var rangeFrom int
-var rangeTo int
+var rangeFrom int32
+var rangeTo int32
 
 func init() {
 	// Here you will define your flags and configuration settings.
@@ -68,8 +68,8 @@ func init() {
 	// when this action is called directly.
 	rootCmd.Flags().StringVarP(&delimiter, "delimiter", "d", " ", "Define a string to be used as the delimiter between columns")
 	rootCmd.Flags().StringVarP(&output, "output-filename", "o", "output.txt", "Specify output filename")
-	rootCmd.Flags().IntVarP(&rangeFrom, "range-from", "f", math.MinInt, "Specify lower limit for number range")
-	rootCmd.Flags().IntVarP(&rangeTo, "range-to", "t", math.MaxInt, "Specify upper limit for number range")
+	rootCmd.Flags().Int32VarP(&rangeFrom, "range-from", "f", math.MinInt32, "Specify lower limit for number range")
+	rootCmd.Flags().Int32VarP(&rangeTo, "range-to", "t", math.MaxInt32, "Specify upper limit for number range")
 }
 
 func run(args []string) error {

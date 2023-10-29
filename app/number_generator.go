@@ -7,8 +7,8 @@ import (
 )
 
 type NumberGenerator struct {
-	RangeFrom int
-	RangeTo   int
+	RangeFrom int32
+	RangeTo   int32
 	Delimiter string
 }
 
@@ -21,7 +21,7 @@ func (g *NumberGenerator) AppendLineEnd(buffer []byte) []byte {
 }
 
 func (g *NumberGenerator) AppendElement(buffer []byte) []byte {
-	randomNumber := rand.Intn(g.RangeTo-g.RangeFrom) + g.RangeFrom
+	randomNumber := rand.Intn(int(g.RangeTo)-int(g.RangeFrom)) + int(g.RangeFrom)
 	return strconv.AppendInt(buffer, int64(randomNumber), 10)
 }
 
