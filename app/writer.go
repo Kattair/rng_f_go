@@ -19,22 +19,36 @@ func WriteMatrixToFile(gen Generator, rowCount, colCount uint, output string) er
 	return nil
 }
 
-func WriteMatrix(gen Generator, rowCount, colCount uint, output io.Writer) {
+func WriteMatrix(gen Generator, rowCount, colCount uint, output io.Writer) error {
 	bufWriter := bufio.NewWriter(output)
 
 	for row := uint(0); row < rowCount; row++ {
-		appendToWriter(gen.AppendLineStart, bufWriter)
-		for col := uint(1); col < colCount; col++ {
-			appendToWriter(gen.AppendElement, bufWriter)
-			appendToWriter(gen.AppendDelimiter, bufWriter)
+		if err := appendToWriter(gen.AppendLineStart, bufWriter); err != nil {
+			return fmt.Errorf("failed to write line start to the output")
 		}
-		appendToWriter(gen.AppendElement, bufWriter)
-		appendToWriter(gen.AppendLineEnd, bufWriter)
+		for col := uint(1); col < colCount; col++ {
+			if err := appendToWriter(gen.AppendElement, bufWriter); err != nil {
+				return fmt.Errorf("failed to write element to the output")
+			}
+			if err := appendToWriter(gen.AppendDelimiter, bufWriter); err != nil {
+				return fmt.Errorf("failed to write delimiter to the output")
+			}
+		}
+		if err := appendToWriter(gen.AppendElement, bufWriter); err != nil {
+			return fmt.Errorf("failed to write element to the output")
+		}
+		if err := appendToWriter(gen.AppendLineEnd, bufWriter); err != nil {
+			return fmt.Errorf("failed to write line end to the output")
+		}
 	}
+
+	err := bufWriter.Flush()
+	return err
 }
 
-func appendToWriter(appender func([]byte) []byte, writer *bufio.Writer) {
+func appendToWriter(appender func([]byte) []byte, writer *bufio.Writer) error {
 	buffer := writer.AvailableBuffer()
 	appendedBuffer := appender(buffer)
-	writer.Write(appendedBuffer)
+	_, err := writer.Write(appendedBuffer)
+	return err
 }
