@@ -17,9 +17,11 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/Kattair/rng_f_go/app"
 	"github.com/spf13/cobra"
@@ -83,7 +85,16 @@ func run(args []string) error {
 	if err != nil {
 		return err
 	}
+
+	log.Print("Starting generation")
+	startTime := time.Now()
+
 	app.WriteMatrixToFile(generator, uint(rowCount), uint(colCount), output)
+
+	endTime := time.Now()
+	elapsedTime := endTime.Sub(startTime)
+
+	log.Printf("Generation took %d ms to complete", elapsedTime.Milliseconds())
 
 	return nil
 }
