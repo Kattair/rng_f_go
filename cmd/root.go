@@ -17,7 +17,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"os"
 	"strconv"
@@ -78,7 +77,7 @@ func run(args []string) error {
 		return err
 	}
 
-	log.Print("Starting generation")
+	fmt.Println("Starting generation")
 	startTime := time.Now()
 
 	app.WriteMatrixToFile(generator, uint(rowCount), uint(colCount), output)
@@ -86,7 +85,7 @@ func run(args []string) error {
 	endTime := time.Now()
 	elapsedTime := endTime.Sub(startTime)
 
-	log.Printf("Generation took %d ms to complete", elapsedTime.Milliseconds())
+	fmt.Printf("Generation took %d ms to complete", elapsedTime.Milliseconds())
 
 	return nil
 }
