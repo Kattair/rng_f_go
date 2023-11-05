@@ -30,16 +30,8 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "rng_f_go ROW_COUNT COL_COUNT",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Args: cobra.ExactArgs(2),
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
+	Short: "Simple program to generate a matrix and write it into a file written in Go.",
+	Args:  cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return run(args)
 	},
@@ -78,7 +70,7 @@ func run(args []string) error {
 	rowCount, rowErr := strconv.ParseUint(args[0], 0, 64)
 	colCount, colErr := strconv.ParseUint(args[1], 0, 64)
 	if rowErr != nil || colErr != nil {
-		return fmt.Errorf("failed to parse row count (was '%s') or col count (was '%s')", args[0], args[1])
+		return fmt.Errorf("failed to parse row count (was '%s') or col count (was '%s') - both values must be parsable unsigned 64 bit integers", args[0], args[1])
 	}
 
 	generator, err := app.NewNumberGenerator(rangeFrom, rangeTo, delimiter)

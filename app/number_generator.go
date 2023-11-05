@@ -18,7 +18,7 @@ type NumberGenerator struct {
 func NewNumberGenerator(rangeFrom, rangeTo int32, delimiter string) (*NumberGenerator, error) {
 	totalRange := int64(rangeTo) - int64(rangeFrom)
 	if totalRange <= 0 {
-		return nil, fmt.Errorf("failed to create number generator with range <%d, %d)", rangeFrom, rangeTo)
+		return nil, fmt.Errorf("failed to create number generator with range <%d, %d) - empty range", rangeFrom, rangeTo)
 	}
 	lineStart := []byte("")
 	lineEnd := []byte("\n")
